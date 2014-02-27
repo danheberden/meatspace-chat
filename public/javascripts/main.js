@@ -238,18 +238,20 @@ define(['jquery', './base/transform', 'gumhelper', './base/videoShooter', 'finge
         var finalWidth = 135;
         var finalHeight = 101;
 
-        // for Android in portrait mode
-        if (window.matchMedia && window.matchMedia('(orientation: portrait)').matches &&
-            navigator.userAgent.match(/Android/i)) {
-          finalHeight = finalWidth * videoHeight / videoWidth;
+        console.log('gUM returned video with dimens ' + videoWidth + 'x' + videoHeight);
+
+        if (videoWidth > videoHeight) {
+          finalHeight = Math.min(finalHeight, Math.round(finalWidth * videoHeight / videoWidth));
+        } else {
+          finalWidth = Math.min(finalWidth, Math.round(finalHeight * videoWidth / videoHeight));
         }
 
+        console.log('chose dimens ' + finalWidth + 'x' + finalHeight);
         videoElement.width = finalWidth;
         videoElement.height = finalHeight;
 
-        footer.prepend(videoElement);
-        videoElement.play();
-        videoShooter = new VideoShooter(videoElement);
+        $('#videoHolder').prepend(videoElement);
+        videoShooter = new VideoShooter(videoElement, 135, 101);
         composer.form.click();
       }
     });

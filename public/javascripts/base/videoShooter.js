@@ -1,7 +1,7 @@
 define(['Animated_GIF'], function (Animated_GIF) {
   'use strict';
 
-  function VideoShooter (videoElement) {
+  function VideoShooter (videoElement, desiredWidth, desiredHeight) {
     this.getShot = function (callback, numFrames, interval, progressCallback) {
       numFrames = numFrames !== undefined ? numFrames : 3;
       interval = interval !== undefined ? interval : 0.1; // In seconds
@@ -10,12 +10,12 @@ define(['Animated_GIF'], function (Animated_GIF) {
       var ag = new Animated_GIF({
         workerPath: 'javascripts/lib/animated-gif/dist/Animated_GIF.worker.min.js'
       });
-      ag.setSize(videoElement.width, videoElement.height);
+      ag.setSize(desiredWidth, desiredHeight);
       ag.setDelay(interval);
 
 
       var captureFrame = function() {
-        ag.addFrame(videoElement);
+        ag.addFrame(videoElement, videoElement.width, videoElement.height);
         pendingFrames--;
 
         // Call back with an r value indicating how far along we are in capture
